@@ -1,0 +1,22 @@
+Quiz App
+---------
+Goals:
+	User accessing the appplication will get a set of 10 MCQ questions which they would need
+	to answer. They will be scored based on their answers to the quiz.
+	This is completely Backend Web App. 
+	Hence, to verify the APIs, we'll be using Postman.
+	
+Tech Stacks Used: 
+	1. Spring Boot 
+	2. Java 11
+	3. PostgreSQL
+
+Dependencies Used:
+	1. Spring Web :	Used to create the Web Application
+	2. PostgreSQL Driver : 	It helps access data in PostgreSQL DB.
+	3. Spring Data JPA:	It allows us to connect to the Spring app and the DB.
+	4. Lombok:	For reducing Boilerplate code.
+	   
+Procedure:
+	The questions being asked to the user, will be stored in the PostgreSQL DB.
+	Have creaeted a QuestionController class that accepts all requests under "localhost:8080/Questions/allQuestions", where the port number is 8080.
