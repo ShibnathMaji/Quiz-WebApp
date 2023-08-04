@@ -3,7 +3,7 @@ Quiz App
 Goals:
 	User accessing the appplication will get a set of 10 MCQ questions which they would need
 	to answer. They will be scored based on their answers to the quiz.
-	This is completely Backend Web App. 
+	This is completely Backend Web Application. 
 	Hence, to verify the APIs, we'll be using Postman.
 	
 Tech Stacks Used: 
@@ -18,5 +18,42 @@ Dependencies Used:
 	4. Lombok:	For reducing Boilerplate code.
 	   
 Procedure:
-	The questions being asked to the user, will be stored in the PostgreSQL DB.
-	Have creaeted a QuestionController class that accepts all requests under "localhost:8080/Questions/allQuestions", where the port number is 8080.
+	This Quiz web application is a Restful WebService.
+	The questions being asked to the user, is stored in the PostgreSQL DB.
+	
+	The application has three layers, each with their own functions:
+		1. Controller Layer:
+			- It is responsible for interacting with the users and accept their requests.
+			- Sends the requests to be processed in the service layer.
+			- Returns the output from the service layer to the User. 
+		
+		2. Service Layer:
+			- All the business logic required by the application stays here.
+			- Processing is done here.
+			- Controller Layer passes on the requests from the user to this layer, for processing
+		
+		3. DAO Layer:
+			- This layer is responsible for interacting with the DB (perform CRUD operations)
+			- DAO layer is used to decouple the Service layer from the DB.
+			
+	To implement the three layers mentioned above, there are three packages:
+		com.example.quizwebapp.controller
+		com.example.quizwebapp.service
+		com.example.quizwebapp.dao
+	which contains all of the Controller, Service and DAO classes respectively.
+	
+	The annotations used:
+	1. @RestController
+		- It tells the Spring framework that this class will be a Controller in the Spring MVC.
+		- Since we are building a RESTful Web Application capable of serving REST APIs (GET, POST, PUT etc),
+		  all the controllers in this application will be annotated with @RestController.
+		- This annotation also combines @controller and @ResponseBody annotatios, so we don't need to use them seperately.
+	
+	2. @Service
+		- It tells the Spring framework that this class will belong in the Service layer.
+		- Signifies that the class is holding business logic.
+	
+	3. @Autowired
+		- This annotation allows for automatic dependency injection
+		- It automatically scans the components present in the current package and the sub packages.
+		- Components are usually marked with @Component, @Service, @Repository or @Controller annotations.
