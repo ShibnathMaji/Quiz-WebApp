@@ -57,3 +57,33 @@ Procedure:
 		- This annotation allows for automatic dependency injection
 		- It automatically scans the components present in the current package and the sub packages.
 		- Components are usually marked with @Component, @Service, @Repository or @Controller annotations.
+	
+	4. @Entity
+		- It is used to show that a class can be mapped to a table.
+		- In JPA, @Entity is used to show a table that's stored in a DB.
+	
+	5. @Table
+		- Used to mention which table will be mapped to the Entity/Model class.
+		
+	6. @Id
+		- Denotes which variable will serve as the Primary Key of the Entity class.
+		
+	7. @Data
+		- This is present in the Lombok dependency.
+		- It is used to add Getter and Setter methods for all the fields mentioned in a class.
+		
+	8. @Repository
+		- It tells the Spring framework that this class/interface will belong in the DAO layer.
+		- It signifies this class contains code for Database used for storage, retrieval, 
+		  update, delete and search operations.
+	
+	Now coming to the DB, for each table we use in the application, we create one class.
+	This class is called an Entity or a Model and contains the data of the application. 
+	The fields (variables) used in the Entity/Model class, represents the columns present in the table.
+	
+	SQL uses "snake_casing" while Java uses "camelCasing".  
+	For a column in the table named "difficult_level", we can use the variable name "difficultyLevel" in our model class.
+	This is becasue we are using JPA, whose object-relational mapping (ORM) framework makes sure this happens.
+	
+	Make sure the PostgreSQL Table name uses the following naming conventions: https://www.geeksforgeeks.org/postgresql-naming-conventions/
+	For example, if the table name is "table_name", we can use @Table(name = "TableName")
