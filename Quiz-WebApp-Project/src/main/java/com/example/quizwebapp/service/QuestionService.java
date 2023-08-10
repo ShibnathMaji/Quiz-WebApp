@@ -26,4 +26,26 @@ public class QuestionService
 		return qDAO.findAll();
 	}
 	
+	//----------------------------------------------------------------------------
+	
+	public List<Question> getQuestionsByCategory(String category) 
+	{
+		/*
+		 * findByCategory() is a custom method, created it in the DAO layer.
+		 * This is tell Spring we want the values based on the "category" column in our DB.
+		 * */
+		return qDAO.findByCategory(category);
+	}
+	
+	//----------------------------------------------------------------------------
+	
+	public void addQuestion(Question question) 
+	{
+		/*
+		 * For adding a question in the DB, we are going to use the save(),
+		 * which is present in CrudRepository interface and is being "implemented" by JPARepository interface.
+		 */
+		qDAO.save(question);	
+	}
+	
 }

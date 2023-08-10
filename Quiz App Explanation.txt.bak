@@ -118,7 +118,7 @@ Procedure:
 	We are adding a method in the QuestionController class to fetch all the questions of a particular category only.
 	For this, the method accepts the category and sends it to the QuestionService class which in turn calls QuestionDAO class.
 	Now we have created a custom method  in the QuestionDAO class named: findByCategory(String category).
-	In our DB we have a column named "category" and this is why we named the method findByCategory().
+	In our DB we have a column named category and this is why we named the method findByCategory().
 	DataJPA can understand that we want to fetch the values based on the the category column.
 	
 	
