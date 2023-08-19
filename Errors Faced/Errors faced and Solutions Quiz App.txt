@@ -1,6 +1,6 @@
----------
-Error #1:
----------
+---------------
+Error/Issue #1:
+---------------
 
 ***************************
 APPLICATION FAILED TO START
@@ -36,3 +36,55 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 We set the ddl-auto to update becasue it'll automatically update the table.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------
+Error/Issue #2:
+---------------
+
+****************************************************************
+Wrong ID showing up in the DB, while adding a question to the DB
+****************************************************************
+
+Description:
+When we are adding a data to the DB, and not specifying the id, the auto generated ID is wrong.
+This is the data we are trying to add:
+	{
+        "category": "JAVA",
+        "difficultyLevel": "Easy",
+        "questionTitle": "How many primitive data types are there in Java?",
+        "option1": "6",
+        "option2": "7",
+        "option3": "8",
+        "option4": "9",
+        "rightAnswer": "8. They are: int, short, double, float, long, char, boolean, byte"
+	}	
+
+---------
+Solution:
+---------
+In Question.java which is our Entity/Model class, for the id column, we have mentioned:
+ 
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Integer id;
+	
+The GenerationType is set to SEQUENCE. We have to change it to IDENTITY, so that it the new data's id column shows the proper order.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------
+Error/Issue #3:
+---------------
+
+****************************************************************************************
+null value in column "id" of relation "question_copy_table" violates not-null constraint
+****************************************************************************************
+
+Details:
+
+Failing row contains (null, JAVA, Easy, 6, 7, 8, 9, How many primitive data types are there in Java?, 8. They are: int, short, double, float, long, char, boolean, byt...)
+
+
+---------
+Solution:
+---------
+This error appaears because we have set GenerationType to IDENTITY and the column for primary key in our DB isn't getting Auto Incremented.
+So, we have to make sure our table's Primary Key column is set to auto increment everytime we add a value.

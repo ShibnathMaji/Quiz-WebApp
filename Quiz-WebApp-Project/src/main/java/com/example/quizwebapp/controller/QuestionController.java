@@ -3,6 +3,7 @@ package com.example.quizwebapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,20 +38,20 @@ public class QuestionController
 	 * There's a Entity/Model class -> Question that stores all the data, so we will return a List of objects
 	 */
 	@GetMapping("allQuestions")		
-	public List<Question> getAllQuestions()
+	public ResponseEntity<List<Question>> getAllQuestions()
 	{
 		return qService.getAllQuestions();
 	}
 	
 	//----------------------------------------------------------------------------
 	
-	/* Prints All Questions Avaialble for a certain category.
+	/* Prints All Questions Available for a certain category.
 	 * Accepting requests in the path-> localhost:8080/Questions/category/<preferred_category>
 	 * 
 	 * This method returns list of questions available for a particular category.
 	 * Accepts a String as input (category).
 	 * @PathVariable("category") extracts the templated part of the URL i.e., {category} and
-	 * maps it to the input variable String categoy.  
+	 * maps it to the input variable String category.  
 	 * Since the templated part and the variable name is same, we can use 
 	 * (@PathVariable String category) instead of (@PathVariable("category") String category)
 	 */
@@ -71,9 +72,8 @@ public class QuestionController
 	 * to the class object i.e., (Question question)
 	 */
 	@PostMapping("add")
-	public String addQuestion(@RequestBody Question question)
+	public ResponseEntity<String>addQuestion(@RequestBody Question question)
 	{
-		qService.addQuestion(question);
-		return "success";
+		return qService.addQuestion(question);
 	}
 }

@@ -3,6 +3,8 @@ package com.example.quizwebapp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.quizwebapp.Question;
@@ -15,7 +17,7 @@ public class QuestionService
 	QuestionDAO qDAO;
 	
 	// This method will fetch the data from DAO layer
-	public List<Question> getAllQuestions() 
+	public ResponseEntity<List<Question>> getAllQuestions() 
 	{
 		/*
 		 * findAll() is a part of the interface ListCrudRepository 
@@ -23,7 +25,18 @@ public class QuestionService
 		 * and will return a list of instances of the class Question, 
 		 * since that's the class we have mentioned in the QuestionDAO Interface
 		 * */
-		return qDAO.findAll();
+		try
+		{
+			// If the request sent by user is correct, we will return Status Code OK.
+			return new ResponseEntity<>(qDAO.findAll(), HttpStatus.OK) ;
+		}
+		catch(Exception e)
+		{
+			// printStackTrace() can pin-point exactly which line is causing the error to appear.
+			e.printStackTrace();
+		}
+		// If the request sent by user is incorrect, we will return Status Code Bad Request. 
+		return new ResponseEntity<>(qDAO.findAll(), HttpStatus.BAD_REQUEST) ;
 	}
 	
 	//----------------------------------------------------------------------------
@@ -39,13 +52,21 @@ public class QuestionService
 	
 	//----------------------------------------------------------------------------
 	
-	public void addQuestion(Question question) 
+	public ResponseEntity<String> addQuestion(Question question) 
 	{
 		/*
 		 * For adding a question in the DB, we are going to use the save(),
 		 * which is present in CrudRepository interface and is being "implemented" by JPARepository interface.
 		 */
-		qDAO.save(question);	
+		try
+		{
+			qDAO.save(question);
+			return new ResponseEntity<>("success", HttpStatus.CREATED);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
 	}
-	
 }

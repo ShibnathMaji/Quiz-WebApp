@@ -128,3 +128,73 @@ Procedure:
 	QuestionDAO interface implements JPARepository interface, due to which we are able to access the save() method.
 	This method is used to save the class objects.
 	In the service layer, we will invoke the save() method which will save the user's question to the DB. 
+	
+	We are going to add HTTP Response Status Codes and handle exceptions.
+	For that we would need to return the Data as well as the Status Codes and till now we were returning only Data.
+	This is where "ResponseEntity" saves the day. We are using ResponseEntity to configure the HTTP Response.
+	We can add ResponseEntity in both the Controller and the Service Layer. 
+	Since we are trying to return a Status Code as well as handle exceptions, we will use it in Service Layer.
+	
+	Before ResponseEntity was used and exceptions were handled getAllQuestions() looked like this: 
+	----------------------------------------------------------------------------------------------
+		Service Layer:
+		--------------
+			public List<Question> getAllQuestions() 
+			{
+				return qDAO.findAll();
+			}
+		
+		Controller Layer 
+		----------------
+			@GetMapping("allQuestions")		
+			public List<Question> getAllQuestions()
+			{
+				return qService.getAllQuestions();
+			}
+	
+	After Adding ResponseEntity and handling exceptions, the functions look like this:
+	----------------------------------------------------------------------------------
+		Service Layer:
+		--------------
+			public ResponseEntity<List<Question>> getAllQuestions() 
+			{
+				
+				try
+				{
+					// If the request sent by user is correct, we will return Status Code OK.
+					return new ResponseEntity<>(qDAO.findAll(), HttpStatus.OK) ;
+				}
+				catch(Exception e)
+				{
+					// printStackTrace() can pin-point exactly which line is causing the error to appear.
+					e.printStackTrace();
+				}
+				// If the request sent by user is incorrect, we will return Status Code Bad Request. 
+				return new ResponseEntity<>(qDAO.findAll(), HttpStatus.BAD_REQUEST) ;
+			}
+		
+		Controller Layer:
+		-----------------
+			@GetMapping("allQuestions")		
+			public ResponseEntity<List<Question>> getAllQuestions()
+			{
+				return qService.getAllQuestions();
+			}
+
+	The Controller Layer's getAllQuestions() now should return an object of ResponseEntity<List<Question>> i.e., the Data and the Status Code.
+	Hence, we changed it's type from "List<Question>" to "ResponseEntity<List<Question>>". Takes the input from the user and send it to the 
+	Service Layer's getAllQuestions(), which sends Data and the Status Code back.
+	
+	In the service layer, first the request is checked if it's a valid one or not, returning 200 OK and 400 Bad Request respectively.
+	Next we check if there's any error/exception which is handled by the try-catch block.
+
+{
+        "category": "JAVA",
+        "difficultyLevel": "Easy",
+        "questionTitle": "How many primitive data types are there in Java?",
+        "option1": "6",
+        "option2": "7",
+        "option3": "8",
+        "option4": "9",
+        "rightAnswer": "8. They are: int, short, double, float, long, char, boolean, byte"
+}

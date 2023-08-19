@@ -14,7 +14,7 @@ import lombok.Data;
 public class Question 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;  // We use Integer instead of int because JPA Repository requires wrapper class.
 	private String category;
 	private String difficultyLevel;
