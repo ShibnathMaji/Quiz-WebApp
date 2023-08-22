@@ -67,6 +67,8 @@ Procedure:
 		
 	6. @Id
 		- Denotes which variable will serve as the Primary Key of the Entity class.
+		- In case a table is not already present, the variables of the Entity class will create columns.
+		- Column marked with @Id annotation will serve as the primary key of the table.
 		
 	7. @Data
 		- This is present in the Lombok dependency.
@@ -103,6 +105,21 @@ Procedure:
 		- The request stores the data sent by the user in it's body, in JSON format.
 		- This annotation tells the Spring framework to extract the data stored in the body and convert it into class object.
 		- This conversion is known as deserialization.
+		
+	12. @RequestParam
+		- It allows us to extract parameters and files from the request URL.
+		- We can accept URL variables using this annotation.
+	
+	13. @ManyToMany
+		- This annotation is used to symbolise the many-to-many relationship mapping.
+		- Many-to-many relationships define entities for which both side of the relationship can have multiple references to each other
+	
+	14. @Query
+		- It is used to define a Query that we can execute
+	
+	15. @GeneratedValue()
+		- It is used to generate the value of a column in an model/entity class.
+		- Usually it is paired with the Primary Key and used to generate a value for the primary key.
 	
 	Now coming to the DB, for each table we use in the application, we create one class.
 	This class is called an Entity or a Model and contains the data of the application. 
@@ -188,13 +205,54 @@ Procedure:
 	In the service layer, first the request is checked if it's a valid one or not, returning 200 OK and 400 Bad Request respectively.
 	Next we check if there's any error/exception which is handled by the try-catch block.
 
-{
-        "category": "JAVA",
-        "difficultyLevel": "Easy",
-        "questionTitle": "How many primitive data types are there in Java?",
-        "option1": "6",
-        "option2": "7",
-        "option3": "8",
-        "option4": "9",
-        "rightAnswer": "8. They are: int, short, double, float, long, char, boolean, byte"
-}
+*************************************************************************************************************************************************************
+
+	Next we will move to the Quiz, starting with Quiz Controller Layer. 
+	We will give users the ability to create a quiz from the questions present in the Questions Table: question_copy_table.
+	Users can choose a topic and create multiple quizzes each of which can contain different number of questions.
+	
+	The questions used in the quizzes, will be taken from the Questions Table and they might be repeated i.e.,
+		Let's say there are two quizzes titled: Quiz1, Quiz2 and Quiz3, with 10 questions each. 
+		Few of the questions used in Quiz1, Quiz2 and Quiz3 might be same (Repeated questions). 
+	
+	Quizzes created, will be stored/persisted in the DB, for future use.
+	For persisting, we'll create a Quiz Table and map it to the Question Table.
+	We can have 3 types of relationship mapping:
+		1. OneToOne		- One Quiz will have only one Question
+		2. OneToMany	- One Quiz can have multiple Questions, but can't have the same Question(s) in different Quiz i.e, Questions can't be repeated
+		3. ManyToMany   - Multiple Quizzes can have multiple Questions each. Different Quizzes can have the same Question(s).
+	From this, it is clear that we want a ManyToMany mapping. This will create an extra table.
+	
+	The Quiz model class will contain three variables: 
+		1. Id: 					It will serve as the primary key. Will be auto incremented.
+		2. Title: 				The title of the Quiz [Quiz1, Quiz2.. as told in the exapmple above. Could be anything else]
+		3. List of Questions:	It will have the list of questions for the quiz. This will have ManyToMany mapping.
+	
+	Due to the ManytoMany relationship mapping, the application will create 2 tables upon running for the first time:
+		1. quiz:			
+			- This contains the list of quizzes that have been created. (Quiz1, Quiz2, etc)
+			- Has two columns: id (auto incremented Primary key) and title (the title of the quiz)
+		2. quiz_questions:
+			- This table maps which questions are present in which quiz.
+			- It will store the quiz_id (id from quiz Table) and the question_id (id of the questions from question_copy_table)
+			- This table doesn't have any primary key. Instead it maps the primary key of quiz Table with the primary key of question_copy_table.
+	
+	The URL syntax for creating a quiz is:
+	localhost:8080/quiz/create?category=<category>&numQ=<numQ>&title=<title>
+	
+	Example of an acceptable URL for quiz creation:
+	localhost:8080/quiz/create?category=Java&numQ=3&title=FirstQuiz
+	
+	Users would need to provide 3 details before creating the quiz:
+		1. category: 	Category of the questions used in the Quiz.
+		2. <numQ>:		Number of questions the user wants in their quiz.
+		3. title:		Name (Title) of the quiz.
+	These details can be sent to the controller via the address bar or via JSON format. Currently we are doing it via the address bar.
+	The details get forwarded to the Quiz Service Layer where the a new Quiz is being created.
+	
+	This is done by createQuiz() and the below mentioned process is followed:
+		1. Since we have the category and the number of questions in the quiz, we call the QuestionDAO layer for acessing the question_copy_table.
+		   From the table, we take the questions in a randomised order. Native SQL query is written for this.
+		2. Next we create a new instance of the Quiz model class. This creates a new quiz.
+		3. After this, we set a title and the list of questions we just polled from QuestionDAO layer to the newly created quiz.
+		4. Finally, we save this new quiz instance which will make it persist for future use.

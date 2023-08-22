@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.quizwebapp.Question;
 import com.example.quizwebapp.dao.QuestionDAO;
+import com.example.quizwebapp.model.Question;
 
 @Service
 public class QuestionService 
 {
 	@Autowired
-	QuestionDAO qDAO;
+	QuestionDAO questionDAO;
 	
 	// This method will fetch the data from DAO layer
 	public ResponseEntity<List<Question>> getAllQuestions() 
@@ -28,7 +28,7 @@ public class QuestionService
 		try
 		{
 			// If the request sent by user is correct, we will return Status Code OK.
-			return new ResponseEntity<>(qDAO.findAll(), HttpStatus.OK) ;
+			return new ResponseEntity<>(questionDAO.findAll(), HttpStatus.OK) ;
 		}
 		catch(Exception e)
 		{
@@ -36,7 +36,7 @@ public class QuestionService
 			e.printStackTrace();
 		}
 		// If the request sent by user is incorrect, we will return Status Code Bad Request. 
-		return new ResponseEntity<>(qDAO.findAll(), HttpStatus.BAD_REQUEST) ;
+		return new ResponseEntity<>(questionDAO.findAll(), HttpStatus.BAD_REQUEST) ;
 	}
 	
 	//----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ public class QuestionService
 		 * findByCategory() is a custom method, created it in the DAO layer.
 		 * This is tell Spring we want the values based on the "category" column in our DB.
 		 * */
-		return qDAO.findByCategory(category);
+		return questionDAO.findByCategory(category);
 	}
 	
 	//----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ public class QuestionService
 		 */
 		try
 		{
-			qDAO.save(question);
+			questionDAO.save(question);
 			return new ResponseEntity<>("success", HttpStatus.CREATED);
 		}
 		catch(Exception e)

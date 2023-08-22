@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.quizwebapp.Question;
+import com.example.quizwebapp.model.Question;
 import com.example.quizwebapp.service.QuestionService;
 
 // This class accepts the questions
@@ -29,7 +29,7 @@ public class QuestionController
 	 * @Autowired annotation does it for us 
 	 */
 	@Autowired
-	QuestionService qService;
+	QuestionService questionService;
 	
 	/* Prints All Questions Available
 	 * Accepting requests in the path-> localhost:8080/Questions/allQuestions
@@ -40,7 +40,7 @@ public class QuestionController
 	@GetMapping("allQuestions")		
 	public ResponseEntity<List<Question>> getAllQuestions()
 	{
-		return qService.getAllQuestions();
+		return questionService.getAllQuestions();
 	}
 	
 	//----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class QuestionController
 	@GetMapping("category/{category}")
 	public List<Question> getQuestionByCategory( @PathVariable("category") String category)
 	{
-		return qService.getQuestionsByCategory(category);
+		return questionService.getQuestionsByCategory(category);
 	}
 	
 	//----------------------------------------------------------------------------
@@ -74,6 +74,6 @@ public class QuestionController
 	@PostMapping("add")
 	public ResponseEntity<String>addQuestion(@RequestBody Question question)
 	{
-		return qService.addQuestion(question);
+		return questionService.addQuestion(question);
 	}
 }
