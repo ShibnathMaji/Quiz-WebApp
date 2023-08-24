@@ -256,3 +256,25 @@ Procedure:
 		2. Next we create a new instance of the Quiz model class. This creates a new quiz.
 		3. After this, we set a title and the list of questions we just polled from QuestionDAO layer to the newly created quiz.
 		4. Finally, we save this new quiz instance which will make it persist for future use.
+		
+*************************************************************************************************************************************************************
+	Now that a quiz has been created and saved in the DB, our next step is to serve the questions of the quiz to the user.
+	For this we create a method in the Quiz Controller that accepts the Quiz ID.
+	It returns the List of Questions present in the mentioned Quiz ID.
+	
+	The questions present in the Quiz will contain all of the below mentioned attributes:
+		1. Question ID
+		2. Question Title
+		3. Difficulty Level
+		4. Options (Option 1 - Option 4)
+		5. Right Answer
+	Since this is a Quiz which we are sending tot the user, we don't need to send all of the above mentioned attributes.
+	We'll only send the Question ID, Question Title and the Options. 
+	
+	For this, we create another model / entity class, QuestionWrapper. It will have only the above mentioned parameters i.e.,
+	Question ID, Question Title and Options (Option 1 - 4)
+	
+	We fetch the quiz instance associated with the mentioned Quiz Id. 
+	Then extract the List of questions present inside the quiz instance. They are objects of Questions.java (Entity/Model class). 
+	This is followed by converting each of the object to an object of QuestionWrapper.java (Entity/Model class).
+	After that we send the converted value to the user.
