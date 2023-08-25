@@ -31,7 +31,8 @@ public class QuestionController
 	@Autowired
 	QuestionService questionService;
 	
-	/* Prints All Questions Available
+	/* Prints All Questions Available in the table
+	 * -------------------------------------------
 	 * Accepting requests in the path-> localhost:8080/Questions/allQuestions
 	 * 
 	 * When user asks for all the questions in the DB, we have to return a List of all the questions.
@@ -45,7 +46,8 @@ public class QuestionController
 	
 	//----------------------------------------------------------------------------
 	
-	/* Prints All Questions Available for a certain category.
+	/* Prints All Questions Available in the table for a certain category.
+	 * -------------------------------------------------------------------
 	 * Accepting requests in the path-> localhost:8080/Questions/category/<preferred_category>
 	 * 
 	 * This method returns list of questions available for a particular category.
@@ -63,7 +65,8 @@ public class QuestionController
 	
 	//----------------------------------------------------------------------------
 	
-	/* Adds Questions
+	/* Adds Questions to the table.
+	 * ----------------------------
 	 * Accepting requests in the path-> localhost:8080/Questions/add
 	 * 
 	 * This method allows a user to submit a which it then adds in the DB and returns a String value.

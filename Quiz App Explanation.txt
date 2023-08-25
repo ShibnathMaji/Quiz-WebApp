@@ -278,3 +278,25 @@ Procedure:
 	Then extract the List of questions present inside the quiz instance. They are objects of Questions.java (Entity/Model class). 
 	This is followed by converting each of the object to an object of QuestionWrapper.java (Entity/Model class).
 	After that we send the converted value to the user.
+	
+	Users have to submit their response as a list of answers in JSON format. We use this to calculate the score.
+	The syntax for the response is:
+	[
+		{	 "id": "2",
+			 "answer" : "Sample Answer 1"
+		},
+		{	 "id": "3",
+			 "answer" : "Sample Answer 2"
+		}
+	]
+	The ordering needs to be the same as the ordering of the questions. For example if question with id 2 was at the top of the list, 
+	the response list should have that question's answer first.
+	For this, we have created another model class: Response.java, in the model package. This is not linked to ResponseEntity in any way.
+	It has two attributes: Integer id and String answer.
+	The response sent by the user is a List of Response objects.
+	In the service class we find the questions in the quiz and get the correct answers associated with the questions and compare them
+	with the answers of the response objects. 
+	
+	Since both Response and Questions are Lists, and the order in which the response was given is the same as the questions sent, we can 
+	simply iterate through the lists, comparing the answer we got with the right answer for the questions. 
+	Then we send back how many questions the user got correct as the score.

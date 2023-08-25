@@ -14,6 +14,7 @@ import com.example.quizwebapp.dao.QuizDAO;
 import com.example.quizwebapp.model.Question;
 import com.example.quizwebapp.model.QuestionWrapper;
 import com.example.quizwebapp.model.Quiz;
+import com.example.quizwebapp.model.Response;
 
 @Service
 public class QuizService 
@@ -64,9 +65,10 @@ public class QuizService
 		
 		/* questionFromDB extract the List of Questions present in the quiz instance. 
 		 * get() is used because quiz's return type is Optional
-		 * Defining questionForUser as an ArrayList. It'll contain objects of type QuestionWrapper.
 		 */ 
 		List<Question> questionFromDB = quiz.get().getQuestions();
+		
+		// Defining questionForUser as an ArrayList. It'll contain objects of type QuestionWrapper.
 		List<QuestionWrapper>questionForUser = new ArrayList<QuestionWrapper>();
 		
 		// Converting Question object to QuestionWrapper object
@@ -81,5 +83,46 @@ public class QuizService
 		}
 		return new ResponseEntity<>(questionForUser, HttpStatus.OK);
 	}
+	
+	//----------------------------------------------------------------------------	
+	
+	/* This method takes Quiz id and the List of Responses that the user sends to the console.
+	 * Each of these "Responses" are an object of Response.java model class.
+	 * We are extracting the attribute "answer" from each of these Response objects.
+	 * Then, we are extracting the attribute "rightAnswer" from each of then Question objects present in the Quiz.
+	 * If these two are the same, that means the answer sent by the user was correct.
+	 */
 
+	public ResponseEntity<String> calculateScore(Integer id, List<Response> responses) 
+	{
+		Optional<Quiz> quiz = quizDAO.findById(id);
+		
+		/* questionFromDB extract the List of Questions present in the quiz instance. 
+		 * get() is used because quiz's return type is Optional
+		 */
+		List<Question> questions = quiz.get().getQuestions();
+		
+		int rightAnswerCounter = 0, questionCounter = 0;
+		
+		for(Response response : responses)
+		{
+			String answer = response.getAnswer();	
+			
+			/* int questionCounter acts as an iterator.
+			 * questions is a List of Question objects. 
+			 * We access the list values by using get(id_of_the_value we want).
+			 * questions.get(questionCounter) gets the Question object
+			 * getRightAnswer() gets the "rightAnswer" attribute of the Question object.
+			 */  
+			String correctAnswer = questions.get(questionCounter).getRightAnswer();
+			
+			if(answer.equals(correctAnswer))
+				rightAnswerCounter++;
+			
+			// Since we have to iterate through the List of Questions, we increment the iterator. 
+			questionCounter++;
+		}
+		String sendResultToUser = "Number of correct answers = "+rightAnswerCounter+" out of " + questionCounter;
+		return new ResponseEntity<String>(sendResultToUser, HttpStatus.OK);
+	}
 }
