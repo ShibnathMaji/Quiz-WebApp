@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.quizwebapp.model.QuestionWrapper;
+import com.example.quizwebapp.model.Quiz;
 import com.example.quizwebapp.model.Response;
 import com.example.quizwebapp.service.QuizService;
 
@@ -44,6 +46,20 @@ public class QuizController
 			@RequestParam int numQ, @RequestParam String title)
 	{
 		return quizService.createQuiz(category, numQ, title);
+	}
+	
+	//----------------------------------------------------------------------------	
+	
+	/* Shows the list of Quizzes created
+	 * ---------------------------------
+	 * For accepting requests in the path-> localhost:8080/quiz/getAllQuizzes
+	 * This method shows all of the Quizzes present in the DB.
+	 */
+	@GetMapping("getAllQuizzes")
+	public ResponseEntity<List<Quiz>> getAllQuizzes()
+	{
+		return quizService.getAllQuizzes();
+		
 	}
 	
 	//----------------------------------------------------------------------------	
@@ -80,5 +96,19 @@ public class QuizController
 			@RequestBody List<Response> responses)
 	{
 		return quizService.calculateScore(id, responses);
+	}
+	
+	//----------------------------------------------------------------------------	
+	
+	/* Deletes a Quiz.
+	 * ---------------
+	 * For accepting requests in the path-> localhost:8080/quiz/delete/<preferred_id>
+	 * Here, we are accepting the QuizID associated with the QuizTitle in the DB from the user.
+	 * The quiz gets deleted.
+	 */
+	@DeleteMapping("delete/{id}")
+	public ResponseEntity<String> deleteQuiz(@PathVariable("id")Integer id)
+	{
+		return quizService.deleteQuizById(id);
 	}
 }

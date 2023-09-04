@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,25 @@ public class QuizService
 	}
 	
 	//----------------------------------------------------------------------------	
+	
+	/* It shows the List of all Quizzes present in the DB, the ids associated with it and the questions
+	 * present in the quiz.
+	*/
+	public ResponseEntity<List<Quiz>> getAllQuizzes() 
+	{
+		try
+		{
+			return new ResponseEntity<List<Quiz>>(quizDAO.findAll(), HttpStatus.OK);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return new ResponseEntity<List<Quiz>>(quizDAO.findAll(), HttpStatus.BAD_REQUEST);
+	}
+	
+	//----------------------------------------------------------------------------	
+	
 	
 	/* This method takes the QuizID as input, finds the quiz instance associated with the ID
 	 * and returns the questions in the Quiz.
@@ -125,4 +145,29 @@ public class QuizService
 		String sendResultToUser = "Number of correct answers = "+rightAnswerCounter+" out of " + questionCounter;
 		return new ResponseEntity<String>(sendResultToUser, HttpStatus.OK);
 	}
+	
+	//----------------------------------------------------------------------------	
+	
+	/* This method takes Quiz id and checks the DB if there's any Quiz associated with that Id.
+	 * If found, it deletes the quiz object.
+	 */
+
+
+	public ResponseEntity<String> deleteQuizById(Integer id) 
+	{
+		Optional<Quiz> optionalObject = quizDAO.findById(id);
+		try
+		{
+			Quiz quizObject = optionalObject.get();
+			quizDAO.delete(quizObject);
+			
+			return new ResponseEntity<>("Deletion successful", HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+	}
+
 }

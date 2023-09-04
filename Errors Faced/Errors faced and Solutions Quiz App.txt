@@ -88,3 +88,17 @@ Solution:
 ---------
 This error appaears because we have set GenerationType to IDENTITY and the column for primary key in our DB isn't getting Auto Incremented.
 So, we have to make sure our table's Primary Key column is set to auto increment everytime we add a value.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------
+Error/Issue #4:
+---------------
+
+SQL Error: 0, SQLState: 23503
+ERROR: update or delete on table "question_copy_table" violates foreign key constraint "fkhl13b0edijs333cnsiyifnorh" on table "quiz_questions"
+  Detail: Key (id)=(17) is still referenced from table "quiz_questions".
+
+---------
+Solution:
+---------
+This error happens becasue a quiz has already been generated which has the id of the question we want to delete.
+To solve this, first we need to delete the quizz/quizzes created which has this question and then delete the question.

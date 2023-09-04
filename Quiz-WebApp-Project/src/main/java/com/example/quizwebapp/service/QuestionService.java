@@ -1,6 +1,7 @@
 package com.example.quizwebapp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,6 +68,58 @@ public class QuestionService
 		{
 			e.printStackTrace();
 		}
+		return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+	}
+	
+	//----------------------------------------------------------------------------
+
+	public ResponseEntity<String> updateQuestion(Question question, Integer id) 
+	{
+		Optional<Question> optionalObject = questionDAO.findById(id);
+		 
+		try 
+		{
+			Question questionObject = optionalObject.get();
+			
+			questionObject.setCategory(question.getCategory());
+			questionObject.setDifficultyLevel(question.getDifficultyLevel());
+			questionObject.setOption1(question.getOption1());
+			questionObject.setOption2(question.getOption2());
+			questionObject.setOption3(question.getOption3());
+			questionObject.setOption4(question.getOption4());
+			questionObject.setQuestionTitle(question.getQuestionTitle());
+			questionObject.setRightAnswer(question.getRightAnswer());
+			
+			questionDAO.save(questionObject);
+			
+			return new ResponseEntity<>("Update successful", HttpStatus.NO_CONTENT);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+	}
+	
+	//----------------------------------------------------------------------------
+
+	public ResponseEntity<String> deleteQuestionByID(Integer id) 
+	{
+		Optional<Question> optionalObject = questionDAO.findById(id);
+		
+		try
+		{
+			if(optionalObject.isPresent())
+				questionDAO.deleteById(id);
+			
+			return new ResponseEntity<>("Deletion successful", HttpStatus.NO_CONTENT);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+			
 		return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
 	}
 }
