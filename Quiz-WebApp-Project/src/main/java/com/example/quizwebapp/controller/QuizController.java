@@ -26,29 +26,10 @@ public class QuizController
 	@Autowired
 	QuizService quizService;
 	
-	/* 
-	 * Creates Quiz.
-	 * -------------
-	 * For accepting requests in the path-> 
-	 * localhost:8080/quiz/create?category=<category>&numQ=<numQ>&title=<title>
-	 * 
-	 * This method allows users to create a quiz.
-	 * We'll take three parameters as input from the request URL: 
-	 * 		1. String category: Category of questions.
-	 * 		2. int numQ :       Number of questions in the quiz
-	 *  	3. String title:    The name/title of the quiz created 
-	 *
-	 *  @RequestParam annotation extracts the parameters from the URL and maps it to the respective
-	 *  input variables 
-	 */
-	@PostMapping("create")
-	public ResponseEntity<String> createQuiz(@RequestParam String category, 
-			@RequestParam int numQ, @RequestParam String title)
-	{
-		return quizService.createQuiz(category, numQ, title);
-	}
 	
-	//----------------------------------------------------------------------------	
+	//---- GET/READ Operations  BEGIN -----------------------------------------------------------------------//
+	
+	
 	
 	/* Shows the list of Quizzes created
 	 * ---------------------------------
@@ -78,6 +59,35 @@ public class QuizController
 		return quizService.getQuizQuestions(id);
 	}
 	
+
+	//---- GET/READ Operations  END --------------------------------------------------------------------------//
+	
+	//---- POST/CREATE Operations  BEGIN ---------------------------------------------------------------------//
+	
+	
+	
+	/* 
+	 * Creates Quiz.
+	 * -------------
+	 * For accepting requests in the path-> 
+	 * localhost:8080/quiz/create?category=<category>&numQ=<numQ>&title=<title>
+	 * 
+	 * This method allows users to create a quiz.
+	 * We'll take three parameters as input from the request URL: 
+	 * 		1. String category: Category of questions.
+	 * 		2. int numQ :       Number of questions in the quiz
+	 *  	3. String title:    The name/title of the quiz created 
+	 *
+	 *  @RequestParam annotation extracts the parameters from the URL and maps it to the respective
+	 *  input variables 
+	 */
+	@PostMapping("create")
+	public ResponseEntity<String> createQuiz(@RequestParam String category, 
+			@RequestParam int numQ, @RequestParam String title)
+	{
+		return quizService.createQuiz(category, numQ, title);
+	}
+	
 	//----------------------------------------------------------------------------	
 	
 	/* Accepts responses for the quiz.
@@ -98,7 +108,11 @@ public class QuizController
 		return quizService.calculateScore(id, responses);
 	}
 	
-	//----------------------------------------------------------------------------	
+	
+	//---- POST/CREATE Operations END ------------------------------------------------------------------//
+	
+	//---- DELETE Operations BEGIN ---------------------------------------------------------------------//
+	
 	
 	/* Deletes a Quiz.
 	 * ---------------
